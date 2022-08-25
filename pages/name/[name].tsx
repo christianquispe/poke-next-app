@@ -1,22 +1,30 @@
-import { Card, Grid, Text, Button, Loading, Container, Image } from "@nextui-org/react";
+import {
+  Card,
+  Grid,
+  Text,
+  Button,
+  Loading,
+  Container,
+  Image,
+} from "@nextui-org/react";
 import confetti from "canvas-confetti";
-import { GetStaticPaths, GetStaticProps, NextPage } from "next"
+import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { useEffect, useState } from "react";
 
-import { pokeApi } from "../../api"
+import { pokeApi } from "../../api";
 
 import { Layout } from "../../components/layouts";
 
-import { Pokemon, PokemonsListResponse } from "../../interfaces"
+import { Pokemon, PokemonsListResponse } from "../../interfaces";
 
-import { localFavorites } from "../../utils";
+import { getPokemonInfo, localFavorites } from "../../utils";
 
 interface PokemonByNamePageProps {
-  pokemon: Pokemon;
+  pokemon: Pick<Pokemon, "name" | "sprites" | "id">;
 }
 
 const PokemonByNamePage: NextPage<PokemonByNamePageProps> = ({ pokemon }) => {
-const [isFavorite, setIsFavorite] = useState<undefined | boolean>(false);
+  const [isFavorite, setIsFavorite] = useState<undefined | boolean>(false);
 
   const onToggleFavorite = () => {
     localFavorites.toggleFavorite(pokemon.id);
@@ -111,7 +119,7 @@ const [isFavorite, setIsFavorite] = useState<undefined | boolean>(false);
       </Grid.Container>
     </Layout>
   );
-}
+};
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const { data } = await pokeApi.get<PokemonsListResponse>(
@@ -120,32 +128,26 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   const handleData = () => {
     return data.results.map((poke) => {
-      return { params: { name: poke.name } }
-    })
-  }
+      return { params: { name: poke.name } };
+    });
+  };
 
   return {
     paths: handleData(),
-    fallback: false
-  }
-}
+    fallback: false,
+  };
+};
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const name = params?.name as any
+  const name = params?.name as string;
 
-  const { data } = await pokeApi.get<Pokemon>(
-    `/pokemon/${name}`
-  );
+  const pokemon = await getPokemonInfo(name);
 
   return {
     props: {
-      pokemon: {
-          id: data.id,
-          name: data.name,
-          sprites: data.sprites
-        },
+      pokemon,
     },
-  }
-}
+  };
+};
 
-export default PokemonByNamePage
+export default PokemonByNamePage;

@@ -16,11 +16,10 @@ import { Layout } from "../../components/layouts";
 
 import { Pokemon } from "../../interfaces";
 
-import { localFavorites } from "../../utils";
-import { pokeApi } from "../../api";
+import { localFavorites, getPokemonInfo } from "../../utils";
 
 interface PokemonProps {
-  pokemon: Pokemon;
+  pokemon: Pick<Pokemon, "name" | "sprites" | "id">;
 }
 
 const Pokemon: NextPage<PokemonProps> = ({ pokemon }) => {
@@ -135,17 +134,13 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const { id } = params as { id: string };
+  const id = params?.id as string;
 
-  const { data } = await pokeApi.get<Pokemon>(`/pokemon/${id}`);
+  const pokemon = await getPokemonInfo(id);
 
   return {
     props: {
-      pokemon: {
-          id: data.id,
-          name: data.name,
-          sprites: data.sprites
-        },
+      pokemon,
     },
   };
 };
