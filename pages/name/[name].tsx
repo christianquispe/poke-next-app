@@ -69,7 +69,7 @@ const PokemonByNamePage: NextPage<PokemonByNamePageProps> = ({ pokemon }) => {
         <Grid xs={12} md={8}>
           <Card>
             <Card.Header
-              css={{ display: "flex", justifyContent: "space-between" }}
+              css={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap" }}
             >
               <Text h1 transform="capitalize">
                 {pokemon.name}
@@ -82,7 +82,7 @@ const PokemonByNamePage: NextPage<PokemonByNamePageProps> = ({ pokemon }) => {
                 {isFavorite === undefined ? (
                   <Loading type="spinner" color="currentColor" />
                 ) : null}
-                {isFavorite ? "Es favorito" : "Guardar en favoritos"}
+                {isFavorite ? "Quitar de favoritos" : "Guardar en favoritos"}
               </Button>
             </Card.Header>
             <Card.Body>
