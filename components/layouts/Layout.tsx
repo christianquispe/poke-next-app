@@ -6,6 +6,7 @@ type LayoutProps = {
   children: React.ReactNode;
   title?: string;
   author?: string;
+  img?: string
 };
 
 const origin = typeof window === "undefined" ? "" : window.location.origin;
@@ -14,6 +15,7 @@ export const Layout: React.FC<LayoutProps> = ({
   children,
   title = "Pokemos App",
   author = "Christian Quispe",
+  img = `${origin}/img/banner.png`
 }) => {
   return (
     <>
@@ -31,7 +33,7 @@ export const Layout: React.FC<LayoutProps> = ({
           property="og:description"
           content={`Esta página es sobre ${title}`}
         />
-        <meta property="og:image" content={`${origin}/img/banner.png`} />
+        <meta property="og:image" content={img} />
       </Head>
 
       <Navbar />
