@@ -1,1 +1,1 @@
-export const TOTAL_POKEMONS = 151
+export const TOTAL_POKEMONS = 2;
