@@ -10,8 +10,10 @@ import {
 
 import { pokeApi } from "../api";
 
-import { PokemonsListResponse, SmallPokemon } from "../interfaces";
 import { getShortDetail } from "../helpers/data";
+import { TOTAL_POKEMONS } from "../config/constants";
+
+import { PokemonsListResponse, SmallPokemon } from "../interfaces";
 
 interface HomePageProps {
   pokemons: SmallPokemon[];
@@ -69,7 +71,7 @@ export const getStaticProps: GetStaticProps = async () => {
   let pokemons: SmallPokemon[] = [];
   const getAllPokemons = async () => {
     const { data } = await pokeApi.get<PokemonsListResponse>(
-      "/pokemon?limit=50"
+      `/pokemon?limit=${TOTAL_POKEMONS}`
     );
     for (const pokemon of data.results) {
       const res = await pokeApi.get(`/pokemon/${pokemon.name}`);
