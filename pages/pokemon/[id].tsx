@@ -48,7 +48,10 @@ const Pokemon: NextPage<PokemonProps> = ({ pokemon }) => {
   }, [pokemon.id]);
 
   return (
-    <Layout title={`Información de ${pokemon.name}`} img={pokemon.sprites.other?.dream_world.front_default}>
+    <Layout
+      title={`Información de ${pokemon.name}`}
+      img={pokemon.sprites.other?.dream_world.front_default}
+    >
       <Grid.Container gap={2} css={{ marginTop: "5px" }}>
         <Grid xs={12} md={4}>
           <Card isHoverable css={{ padding: "30px" }}>
@@ -68,7 +71,11 @@ const Pokemon: NextPage<PokemonProps> = ({ pokemon }) => {
         <Grid xs={12} md={8}>
           <Card>
             <Card.Header
-              css={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap" }}
+              css={{
+                display: "flex",
+                justifyContent: "space-between",
+                flexWrap: "wrap",
+              }}
             >
               <Text h1 transform="capitalize">
                 {pokemon.name}

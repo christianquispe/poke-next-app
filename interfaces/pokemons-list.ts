@@ -1,3 +1,5 @@
+import { Pokemon } from "./pokemon-full";
+
 export interface PokemonsListResponse {
   count: number;
   next?: string;
@@ -5,9 +7,7 @@ export interface PokemonsListResponse {
   results: SmallPokemon[];
 }
 
-export interface SmallPokemon {
-  name: string;
-  url: string;
-  id: number;
-  img: string;
-}
+export type SmallPokemon = Pick<
+  Pokemon,
+  "id" | "sprites" | "name" | "types" | "height" | "weight" | "stats"
+>;

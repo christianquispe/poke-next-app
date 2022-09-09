@@ -8,8 +8,6 @@ interface NavbarProps {
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ test }) => {
-  const { theme } = useTheme();
-
   return (
     <div
       style={{
@@ -17,7 +15,6 @@ export const Navbar: React.FC<NavbarProps> = ({ test }) => {
         width: "100%",
         alignItems: "center",
         padding: "0 20px",
-        backgroundColor: theme?.colors.gray100.value,
       }}
     >
       <Image
@@ -27,7 +24,7 @@ export const Navbar: React.FC<NavbarProps> = ({ test }) => {
         height={70}
       />
       <NextLink href="/" passHref>
-        <Link>
+        <Link css={{ background: "transparent" }}>
           <Text color="white" h2>
             P
           </Text>
@@ -39,7 +36,7 @@ export const Navbar: React.FC<NavbarProps> = ({ test }) => {
 
       <Spacer css={{ flex: 1 }} />
       <NextLink href="/favorites" passHref>
-        <Link>
+        <Link css={{ background: "transparent" }}>
           <Text color="white">Favoritos</Text>
         </Link>
       </NextLink>
