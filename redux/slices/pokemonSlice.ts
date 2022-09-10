@@ -7,6 +7,8 @@ import { SmallPokemon } from "../../interfaces";
 
 export interface PokemonState {
   allPokemons: SmallPokemon[];
+  currentPokemon?: SmallPokemon
+  hoveredPokemon?: SmallPokemon
 }
 
 const initialState: PokemonState = {
@@ -23,10 +25,22 @@ export const pokemonSlice = createSlice({
     ) => {
       state.allPokemons = [...state.allPokemons, ...action.payload];
     },
+    selectPokemon: (
+      state: PokemonState,
+      action: PayloadAction<SmallPokemon | undefined>
+    ) => {
+      state.currentPokemon = action.payload;
+    },
+    hoverPokemon: (
+      state: PokemonState,
+      action: PayloadAction<SmallPokemon | undefined>
+    ) => {
+      state.hoveredPokemon = action.payload;
+    },
   },
   // Special reducer for hydrating the state. Special case for next-redux-wrapper
   extraReducers: {
-    [HYDRATE]: (state: PokemonState, action) => {
+    [HYDRATE]: (state, action) => {
       return {
         ...state,
         ...action?.payload.pokemons,
@@ -36,9 +50,9 @@ export const pokemonSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { initPokemons } = pokemonSlice.actions;
+export const { initPokemons, selectPokemon, hoverPokemon } = pokemonSlice.actions;
 
 export const selectPokemonsState = (state: AppState) =>
-  state.pokemons.allPokemons;
+  state.pokemons;
 
 export default pokemonSlice.reducer;

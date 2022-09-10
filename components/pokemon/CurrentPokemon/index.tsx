@@ -1,22 +1,21 @@
 import React from "react";
 import { Image } from "@nextui-org/react";
 
-import { SmallPokemon } from "../../../interfaces";
-
 import { PokemonCard } from "../PokemonCard";
+
+import { useSelector } from "react-redux";
+import { selectPokemonsState } from "../../../redux/slices/pokemonSlice";
 
 import { WrraperStyled, CurrentPokemonStyled } from "./styles";
 
-interface CurrentPokemonProps {
-  pokemon?: SmallPokemon;
-}
+export const CurrentPokemon: React.FC = () => {
+  const { currentPokemon, hoveredPokemon } = useSelector(selectPokemonsState);
 
-export const CurrentPokemon: React.FC<CurrentPokemonProps> = ({ pokemon }) => {
   return (
     <WrraperStyled className="current-pokemon">
       <CurrentPokemonStyled>
-        {pokemon ? (
-          <PokemonCard pokemon={pokemon} />
+        {(hoveredPokemon || currentPokemon) ? (
+          <PokemonCard pokemon={hoveredPokemon || currentPokemon} />
         ) : (
           <div>
             <Image

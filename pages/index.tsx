@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { NextPage } from "next";
 import { Modal, useModal } from '@nextui-org/react'
 
@@ -15,11 +14,13 @@ import { pokeApi } from "../api";
 import { getShortDetail } from "../helpers/data";
 import { TOTAL_POKEMONS } from "../config/constants";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { wrapper } from "../redux/store";
 import {
   initPokemons,
   selectPokemonsState,
+  selectPokemon,
+  hoverPokemon,
 } from "../redux/slices/pokemonSlice";
 
 import { PokemonsListResponse, SmallPokemon } from "../interfaces";
@@ -29,37 +30,32 @@ interface HomePageProps {
 }
 
 const HomePage: NextPage<HomePageProps> = () => {
-  const [currentPokemon, setCurrentPokemon] = useState<
-    SmallPokemon | undefined
-  >();
-  const [hoveredPokemon, setHoveredPokemon] = useState<
-    SmallPokemon | undefined
-  >();
+  const dispatch = useDispatch();
   const { setVisible, bindings } = useModal();
-  const pokemons = useSelector(selectPokemonsState);
+  const { allPokemons: pokemons, currentPokemon } = useSelector(selectPokemonsState);
 
   const handleHover = (pokemon: SmallPokemon) => {
-    setHoveredPokemon(pokemon);
+    dispatch(hoverPokemon(pokemon))
   };
 
   const handleLeave = () => {
-    setHoveredPokemon(undefined);
+    dispatch(hoverPokemon(undefined))
   };
 
   const handleSelect = (pokemon: SmallPokemon) => {
     setVisible(true)
-    setCurrentPokemon(pokemon);
+    dispatch(selectPokemon(pokemon))
   };
 
   const handleClose = () => {
     setVisible(false)
-    setCurrentPokemon(undefined) 
+    dispatch(selectPokemon(undefined))
   }
 
   return (
     <Layout title="Listado de Pokémons">
       <ContainerPokedex>
-        <CurrentPokemon pokemon={hoveredPokemon || currentPokemon} />
+        <CurrentPokemon />
         <PokemonList
           onSelect={handleSelect}
           onHover={handleHover}
@@ -88,6 +84,7 @@ export const getStaticProps = wrapper.getStaticProps((store) => async () => {
   };
 
   await getAllPokemons();
+
   store.dispatch(initPokemons(pokemons));
 
   return {
