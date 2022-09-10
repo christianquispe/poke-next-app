@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { NextPage } from "next";
+import { Modal, useModal } from '@nextui-org/react'
 
 import { Layout } from "../components/layouts";
 import {
   PokemonList,
   ContainerPokedex,
   CurrentPokemon,
+  PokemonCard,
 } from "../components/pokemon";
 
 import { pokeApi } from "../api";
@@ -33,7 +35,7 @@ const HomePage: NextPage<HomePageProps> = () => {
   const [hoveredPokemon, setHoveredPokemon] = useState<
     SmallPokemon | undefined
   >();
-  const [hasSelection, setHasSelection] = useState(false);
+  const { setVisible, bindings } = useModal();
   const pokemons = useSelector(selectPokemonsState);
 
   const handleHover = (pokemon: SmallPokemon) => {
@@ -45,19 +47,14 @@ const HomePage: NextPage<HomePageProps> = () => {
   };
 
   const handleSelect = (pokemon: SmallPokemon) => {
-    if (hasSelection) {
-      setCurrentPokemon((prevPokemon) => {
-        if (prevPokemon?.id === pokemon.id) {
-          setHasSelection(false);
-          return undefined;
-        }
-        return pokemon;
-      });
-      return;
-    }
-    setHasSelection(true);
+    setVisible(true)
     setCurrentPokemon(pokemon);
   };
+
+  const handleClose = () => {
+    setVisible(false)
+    setCurrentPokemon(undefined) 
+  }
 
   return (
     <Layout title="Listado de Pokémons">
@@ -71,6 +68,9 @@ const HomePage: NextPage<HomePageProps> = () => {
           selectedPokemon={currentPokemon}
         />
       </ContainerPokedex>
+      <Modal open={bindings.open} onClose={handleClose} blur>
+        <PokemonCard pokemon={currentPokemon} />
+      </Modal>
     </Layout>
   );
 };
