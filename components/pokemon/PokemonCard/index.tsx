@@ -1,67 +1,54 @@
-import { Card, Row, Text, Image, CardProps, CSS } from "@nextui-org/react";
-import { MdCatchingPokemon } from "react-icons/md";
+import React from "react";
+import NextLink from "next/link";
+import { Link, Image, Text } from "@nextui-org/react";
 
 import { SmallPokemon } from "../../../interfaces";
 
-import { CardBody } from "./styles";
+import { PokemonCardStyled } from "./styles";
 
-interface PokemonCardProps extends Omit<CardProps, "children"> {
-  pokemon: SmallPokemon;
-  isSelected: boolean;
+interface PokemonCardProps {
+  pokemon?: SmallPokemon;
 }
 
-export const PokemonCard: React.FC<PokemonCardProps> = ({
-  pokemon,
-  isSelected,
-  ...rest
-}) => {
-  const css: CSS = {
-    background: "transparent",
-    borderRadius: "0",
-    "&:hover": {
-      background:
-        "linear-gradient(115deg, rgb(38, 41, 43) 57.7%, rgb(0, 0, 0) 57.7%)",
-    },
-  };
-
+export const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon }) => {
   return (
-    <Card
-      isPressable
-      disableRipple={false}
-      css={
-        isSelected
-          ? {
-              ...css,
-              background:
-                "linear-gradient(115deg, rgb(38, 41, 43) 57.7%, rgb(0, 0, 0) 57.7%)",
-            }
-          : css
-      }
-      {...rest}
-    >
-      <CardBody>
-        <Row justify="space-between" align="center">
-          <div className="left">
-            <Image
-              css={{ margin: 0 }}
-              src={
-                pokemon?.sprites.other?.["official-artwork"].front_default ||
-                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/132.svg"
-              }
-              alt={`Imagen de ${pokemon.name}`}
-              width={50}
-              height={50}
-            />
-            <Text>#{pokemon.id}</Text>
-          </div>
-          <div className="right">
-            <Text transform="uppercase">{pokemon.name}</Text>
-            <Text>
-              <MdCatchingPokemon />
-            </Text>
-          </div>
-        </Row>
-      </CardBody>
-    </Card>
+    <PokemonCardStyled>
+      <div className="header">
+        <Text transform="uppercase" css={{ m: "0" }}>
+          {pokemon?.name}
+        </Text>
+        <NextLink href={`/name/${pokemon?.name}`}>
+          <Link css={{ background: "transparent", color: "$black" }}>
+            Ver detalle
+          </Link>
+        </NextLink>
+      </div>
+      <div className="image-wrapper">
+        <Image
+          src={
+            pokemon?.sprites.other?.["official-artwork"].front_default ||
+            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/132.svg"
+          }
+          alt={`${pokemon?.name}`}
+          width={300}
+          height={300}
+          css={typeof pokemon === "undefined" ? { opacity: 0.1 } : {}}
+        />
+      </div>
+      <div className="left">Type</div>
+      <div className="right">{pokemon?.types?.[0].type.name}</div>
+      <div className="left">Height</div>
+      <div className="right">{pokemon?.height} m</div>
+      <div className="left">Weight</div>
+      <div className="right">{pokemon?.weight} lbs</div>
+      {pokemon?.stats
+        .map(({ stat, base_stat }) => (
+          <React.Fragment key={stat?.name}>
+            <div className="left">{stat.name.replace("-", " ")}</div>
+            <div className="right">{base_stat}</div>
+          </React.Fragment>
+        ))
+        .slice(0, 3)}
+    </PokemonCardStyled>
   );
 };

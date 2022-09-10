@@ -1,5 +1,5 @@
 import { SmallPokemon } from "../../../interfaces";
-import { PokemonCard } from "../PokemonCard";
+import { PokemonItem } from "../PokemonItem";
 
 import { PokemonListStyled } from "./styles";
 
@@ -21,7 +21,7 @@ export const PokemonList: React.FC<PokemonListProps> = ({
   return (
     <PokemonListStyled>
       {pokemons.map((pokemon) => (
-        <PokemonCard
+        <PokemonItem
           key={pokemon.id}
           pokemon={pokemon}
           onMouseOver={() => onHover(pokemon)}
